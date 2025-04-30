@@ -44,3 +44,26 @@ export class Amazon extends Piece {
         return moves;
     }
 }
+
+export class King extends Piece {
+    getPossibleMoves(board: Piece[][]): Position[] {
+        const directions = [
+            { dr: -1, dc: -1 }, { dr: -1, dc: 0 }, { dr: -1, dc: 1 },
+            { dr: 0, dc: -1 },                  { dr: 0, dc: 1 },
+            { dr: 1, dc: -1 }, { dr: 1, dc: 0 }, { dr: 1, dc: 1 },
+        ];
+
+        const moves: Position[] = [];
+        for (const { dr, dc } of directions) {
+            const newRow = this.position.row + dr;
+            const newCol = this.position.col + dc;
+            if (
+                newRow>= 0 && newRow < board.length &&
+                newCol >= 0 && newCol < board[0].length
+            ){
+                moves.push({ row: newRow, col: newCol });
+            }
+        }
+        return moves;
+    }
+}
