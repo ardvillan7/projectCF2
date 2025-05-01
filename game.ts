@@ -12,6 +12,20 @@ const rl = readline.createInterface({
 
 function startGame() {
     const board = new Board();
+    const numObstacles = 8; // number of obstacles 
+        while (board.obstacles.length < numObstacles) {
+    const row = Math.floor(Math.random() * board.size);
+    const col = Math.floor(Math.random() * board.size);
+
+  // avoid placing obstacles on starting piece positions
+    const isStartingPos =
+        (row === 0 && (col === 0 || col === 4)) || // white rook or white king
+        (row === 7 && (col === 4 || col === 7));  // black king or amazon
+
+    if (isStartingPos || board.isObstacle({ row, col })) continue;
+
+    board.placeObstacle({ row, col });
+}
 
 const whiteRook = new Rook(Color.White, {row: 0, col: 0});
 const blackAmazon = new Amazon(Color.Black, { row: 7, col: 7} );
@@ -39,6 +53,13 @@ board.printBoard();
   
       const from = { row: fromRow, col: fromCol };
       const to = { row: toRow, col: toCol };
+
+      //if player moves into obstacle
+      if (board.isObstacle(to)) {
+        console.log("🚧 You can't move into an obstacle! Try again.");
+        return promptMove();
+      }
+      
   
       const moved = board.movePiece(from, to);
       if (!moved) {
@@ -59,6 +80,8 @@ board.printBoard();
       promptMove();
     });
   }
+
+  
   promptMove();
   
 }
